@@ -1,0 +1,11 @@
+{
+  "db_path": "PassSentinel.db",
+  "db_defaults": {
+    "inactivity_len": 15, 
+    "password_gen_len": 30,
+    "gen_symbols": true,
+    "search_username": true,
+    "search_notes": false,
+    "search_url": false
+  }
+}
