@@ -17,7 +17,7 @@ This local password manager is a hobby-project of mine.
 
 ## Installation
 
-1. Download the latest release from this Github page.
+1. Download the **installer** latest release [here](https://github.com/jrydecki/PassSentinel/releases). (Not the source code!)
 2. Extract the files from the downloaded ZIP file.
 3. Run the `setup.exe` file.
 

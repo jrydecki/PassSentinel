@@ -214,7 +214,7 @@
             // 
             inactivityComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             inactivityComboBox.FormattingEnabled = true;
-            inactivityComboBox.Items.AddRange(new object[] { "5", "15", "30", "60", "Never", "1" });
+            inactivityComboBox.Items.AddRange(new object[] { "5", "15", "30", "60", "Never" });
             inactivityComboBox.Location = new Point(188, 35);
             inactivityComboBox.Name = "inactivityComboBox";
             inactivityComboBox.Size = new Size(121, 23);
