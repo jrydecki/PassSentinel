@@ -24,6 +24,9 @@ namespace PassSentinel
             deleteBtn.Text = buttonText;
             this.ExtraConfirm = extraConfirm;
             this.Confirmed = false;
+
+            this.ActiveControl = passwordTextBox; // Focus on password
+            this.AcceptButton = deleteBtn; // 'Enter' presses the login btn
         }
 
         public bool GetConfirmed()

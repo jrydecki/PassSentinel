@@ -46,10 +46,15 @@
             generalTab = new TabPage();
             inactivityComboBox = new ComboBox();
             inactivityLabel = new Label();
+            viewTab = new TabPage();
+            viewUrlCheck = new CheckBox();
+            viewUsernameCheck = new CheckBox();
+            viewLabel = new Label();
             searchTab.SuspendLayout();
             passwordTab.SuspendLayout();
             tabControl.SuspendLayout();
             generalTab.SuspendLayout();
+            viewTab.SuspendLayout();
             SuspendLayout();
             // 
             // updateBtn
@@ -129,6 +134,7 @@
             usernameCheck.TabIndex = 5;
             usernameCheck.Text = "Username";
             usernameCheck.UseVisualStyleBackColor = true;
+            usernameCheck.CheckedChanged += usernameCheck_CheckedChanged;
             // 
             // searchLabel
             // 
@@ -191,6 +197,7 @@
             // tabControl
             // 
             tabControl.Controls.Add(generalTab);
+            tabControl.Controls.Add(viewTab);
             tabControl.Controls.Add(passwordTab);
             tabControl.Controls.Add(searchTab);
             tabControl.Location = new Point(12, 12);
@@ -229,6 +236,51 @@
             inactivityLabel.TabIndex = 0;
             inactivityLabel.Text = "Lock after how many minutes of inactivity:";
             // 
+            // viewTab
+            // 
+            viewTab.Controls.Add(viewUrlCheck);
+            viewTab.Controls.Add(viewUsernameCheck);
+            viewTab.Controls.Add(viewLabel);
+            viewTab.Location = new Point(4, 24);
+            viewTab.Name = "viewTab";
+            viewTab.Padding = new Padding(3);
+            viewTab.Size = new Size(343, 150);
+            viewTab.TabIndex = 3;
+            viewTab.Text = "View";
+            viewTab.UseVisualStyleBackColor = true;
+            // 
+            // viewUrlCheck
+            // 
+            viewUrlCheck.AutoSize = true;
+            viewUrlCheck.CheckAlign = ContentAlignment.BottomCenter;
+            viewUrlCheck.Location = new Point(202, 59);
+            viewUrlCheck.Name = "viewUrlCheck";
+            viewUrlCheck.Size = new Size(32, 33);
+            viewUrlCheck.TabIndex = 7;
+            viewUrlCheck.Text = "URL";
+            viewUrlCheck.UseVisualStyleBackColor = true;
+            // 
+            // viewUsernameCheck
+            // 
+            viewUsernameCheck.AutoSize = true;
+            viewUsernameCheck.CheckAlign = ContentAlignment.BottomCenter;
+            viewUsernameCheck.Location = new Point(97, 59);
+            viewUsernameCheck.Name = "viewUsernameCheck";
+            viewUsernameCheck.Size = new Size(64, 33);
+            viewUsernameCheck.TabIndex = 6;
+            viewUsernameCheck.Text = "Username";
+            viewUsernameCheck.UseVisualStyleBackColor = true;
+            viewUsernameCheck.CheckedChanged += checkBox1_CheckedChanged;
+            // 
+            // viewLabel
+            // 
+            viewLabel.AutoSize = true;
+            viewLabel.Location = new Point(123, 16);
+            viewLabel.Name = "viewLabel";
+            viewLabel.Size = new Size(99, 15);
+            viewLabel.TabIndex = 0;
+            viewLabel.Text = "Show in vault list:";
+            // 
             // PreferencesForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -248,6 +300,8 @@
             passwordTab.PerformLayout();
             tabControl.ResumeLayout(false);
             generalTab.ResumeLayout(false);
+            viewTab.ResumeLayout(false);
+            viewTab.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -269,5 +323,9 @@
         private TabPage generalTab;
         private Label inactivityLabel;
         private ComboBox inactivityComboBox;
+        private TabPage viewTab;
+        private CheckBox viewUsernameCheck;
+        private Label viewLabel;
+        private CheckBox viewUrlCheck;
     }
 }

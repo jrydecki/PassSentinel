@@ -1,11 +1,14 @@
 {
   "db_path": "PassSentinel.db",
+  "min_pass_length":  10,
   "db_defaults": {
     "inactivity_len": 15, 
     "password_gen_len": 30,
     "gen_symbols": true,
     "search_username": true,
     "search_notes": false,
-    "search_url": false
+    "search_url": false,
+    "view_username": true,
+    "view_url": false
   }
 }

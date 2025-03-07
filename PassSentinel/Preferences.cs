@@ -14,6 +14,9 @@ namespace PassSentinel
         public static bool SearchNotes { get; set; }
         public static bool SearchURL { get; set; }
         public static int InactivityTimer { get; set; } // Minutes
+
+        public static bool ViewUsername { get; set; }
+        public static bool ViewURL { get; set; }
         
 
     } // end class

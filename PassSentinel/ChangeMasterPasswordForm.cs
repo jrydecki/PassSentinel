@@ -41,6 +41,13 @@ namespace PassSentinel
                 return false;
             }
 
+            int minLen = (int)Config.Get("min_pass_length");
+            if (newPass1TextBox.Text.Length < minLen)
+            {
+                errorLabel.Text = $"Password must be at least {minLen} characters.";
+                return false;
+            }
+
             return true;
         } // end ValidInput
 

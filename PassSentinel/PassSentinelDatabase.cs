@@ -44,7 +44,9 @@ namespace PassSentinel
                             search_username INT,
                             search_notes INT,
                             search_url INT,
-                            inactivity_len INT
+                            inactivity_len INT,
+                            view_username INT,
+                            view_url INT
                         );
                         CREATE TABLE IF NOT EXISTS VaultItems (
                             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -72,8 +74,8 @@ namespace PassSentinel
 
                 command.CommandText =
                     @"
-                        INSERT INTO User (username, salt, hash_salt, hash, pass_len, gen_symbols, search_username, search_notes, search_url, inactivity_len) 
-                        VALUES (@username, @salt, @hashSalt, @hash, @pass_len, @gen_symbols, @search_username, @search_notes, @search_url, @inactivity_len);
+                        INSERT INTO User (username, salt, hash_salt, hash, pass_len, gen_symbols, search_username, search_notes, search_url, inactivity_len, view_username, view_url) 
+                        VALUES (@username, @salt, @hashSalt, @hash, @pass_len, @gen_symbols, @search_username, @search_notes, @search_url, @inactivity_len, @view_username, @view_url);
                     ";
                 command.Parameters.AddWithValue("@username", username);
                 command.Parameters.AddWithValue("@salt", masterSalt);
@@ -85,6 +87,8 @@ namespace PassSentinel
                 command.Parameters.AddWithValue("@search_notes", Convert.ToInt32((bool)Config.GetDBDefault("search_notes")));
                 command.Parameters.AddWithValue("@search_url", Convert.ToInt32((bool)Config.GetDBDefault("search_url")));
                 command.Parameters.AddWithValue("@inactivity_len", (int)Config.GetDBDefault("inactivity_len"));
+                command.Parameters.AddWithValue("@view_username", Convert.ToInt32((bool)Config.GetDBDefault("view_username")));
+                command.Parameters.AddWithValue("@view_url", Convert.ToInt32((bool)Config.GetDBDefault("view_url")));
                 command.ExecuteNonQuery();
 
             } // end connection 'using'
@@ -371,7 +375,7 @@ namespace PassSentinel
                 var command = connection.CreateCommand();
                 command.CommandText =
                     @"
-                        SELECT pass_len, gen_symbols, search_username, search_notes, search_url, inactivity_len
+                        SELECT pass_len, gen_symbols, search_username, search_notes, search_url, inactivity_len, view_username, view_url
                         FROM User
                         WHERE id = @id;
                     ";
@@ -381,13 +385,15 @@ namespace PassSentinel
                 {
                     if (reader.Read())
                     {
-                        // The Keys EXACTLY MATCH the Preferences Object Attributes
+                        // The Keys EXACTLY MATCH the Preferences Class Attributes
                         dict["RandomPasswordLength"] = Convert.ToInt32((Int64)reader["pass_len"]);
                         dict["GenerateSymbols"] = Convert.ToBoolean((Int64)reader["gen_symbols"]);
                         dict["SearchUsername"] = Convert.ToBoolean((Int64)reader["search_username"]);
                         dict["SearchNotes"] = Convert.ToBoolean((Int64)reader["search_notes"]);
                         dict["SearchURL"] = Convert.ToBoolean((Int64)reader["search_url"]);
                         dict["InactivityTimer"] = Convert.ToInt32((Int64)reader["inactivity_len"]);
+                        dict["ViewUsername"] = Convert.ToBoolean((Int64)reader["view_username"]);
+                        dict["ViewURL"] = Convert.ToBoolean((Int64)reader["view_url"]);
 
                     }
                 } // end reader 'using'
@@ -395,6 +401,7 @@ namespace PassSentinel
             return dict;
         } // end GetPreferences
 
+        // Update Preferences based on an input dictionary
         public void UpdatePreferences(Dictionary<string, object> dict)
         {
             using (var connection = new SqliteConnection(this.connectionString))
@@ -406,7 +413,7 @@ namespace PassSentinel
                 command.CommandText =
                     @"
                         UPDATE User
-                        SET pass_len = @pass_len, gen_symbols = @gen_symbols, search_username = @username, search_notes = @notes, search_url = @url, inactivity_len = @inactivity_len
+                        SET pass_len = @pass_len, gen_symbols = @gen_symbols, search_username = @username, search_notes = @notes, search_url = @url, inactivity_len = @inactivity_len, view_username = @view_username, view_url = @view_url
                         WHERE id = @id;
                     ";
                 command.Parameters.AddWithValue("@pass_len", (int)dict["RandomPasswordLength"]);
@@ -416,6 +423,39 @@ namespace PassSentinel
                 command.Parameters.AddWithValue("@url", Convert.ToInt32((bool)dict["SearchURL"]));
                 command.Parameters.AddWithValue("@id", Globals.UserID);
                 command.Parameters.AddWithValue("@inactivity_len", (int)dict["InactivityTimer"]);
+                command.Parameters.AddWithValue("@view_username", Convert.ToInt32((bool)dict["ViewUsername"]));
+                command.Parameters.AddWithValue("@view_url", Convert.ToInt32((bool)dict["ViewURL"]));
+
+                command.ExecuteNonQuery();
+
+            } // end connection 'using'
+        } // end UpdatePreferences
+
+
+        // Update Preferences based on the Preferences static class
+        public void UpdatePreferences()
+        {
+            using (var connection = new SqliteConnection(this.connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+
+                command.CommandText =
+                    @"
+                        UPDATE User
+                        SET pass_len = @pass_len, gen_symbols = @gen_symbols, search_username = @username, search_notes = @notes, search_url = @url, inactivity_len = @inactivity_len, view_username = @view_username, view_url = @view_url
+                        WHERE id = @id;
+                    ";
+
+                command.Parameters.AddWithValue("@pass_len", Preferences.RandomPasswordLength);
+                command.Parameters.AddWithValue("@gen_symbols", Convert.ToInt32(Preferences.GenerateSymbols));
+                command.Parameters.AddWithValue("@username", Convert.ToInt32(Preferences.SearchUsername));
+                command.Parameters.AddWithValue("@notes", Convert.ToInt32(Preferences.SearchNotes));
+                command.Parameters.AddWithValue("@url", Convert.ToInt32(Preferences.SearchURL));
+                command.Parameters.AddWithValue("@id", Globals.UserID);
+                command.Parameters.AddWithValue("@inactivity_len", Preferences.InactivityTimer);
+                command.Parameters.AddWithValue("@view_username", Convert.ToInt32(Preferences.ViewUsername));
+                command.Parameters.AddWithValue("@view_url", Convert.ToInt32(Preferences.ViewURL));
 
                 command.ExecuteNonQuery();
 

@@ -19,11 +19,15 @@ namespace PassSentinel
         public bool search_username { get; set; }
         public bool search_notes { get; set; }
         public bool search_url { get; set; }
+
+        public bool view_username { get; set; }
+        public bool view_url { get; set; }
     }
 
     public class ConfigObj
     {
         public string db_path { get; set; }
+        public int min_pass_length { get; set; }
         public DBDefaultsObj db_defaults { get; set; }
     }
 

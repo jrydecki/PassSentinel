@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 namespace CSV
 {
 
+    public enum Manager
+    {
+        PassSentinel = 0,
+        OnePassword = 1,
+        LastPass = 2,
+        Bitwarden = 3
+    } // end Manager enum
+
     internal class PassSentinelItem
     {
         public string Name { get; set; }
@@ -15,6 +23,7 @@ namespace CSV
         public string Password { get; set; }
         public string Notes { get; set; }
 
+        public PassSentinelItem() { }
         public PassSentinelItem(string Name, string URL, string Username, string Password, string Notes)
         {
             this.Name = Name;
@@ -33,6 +42,16 @@ namespace CSV
         public string Password { get; set; }
         public string Notes { get; set; }
 
+        public OnePasswordItem() { }
+        public OnePasswordItem(string Name, string URL, string Username, string Password, string Notes)
+        {
+            this.Title = Name;
+            this.Website = URL;
+            this.Username = Username;
+            this.Password = Password;
+            this.Notes = Notes;
+        }
+
     } // end OnePasswordItem Class
 
     internal class LastPassItem
@@ -45,6 +64,20 @@ namespace CSV
         public string name { get; set; }
         public string grouping { get; set; }
         public string fav { get; set; }
+
+        public LastPassItem() { }
+
+        public LastPassItem(string Name, string URL, string Username, string Password, string Notes)
+        {
+            this.url = URL;
+            this.username = Username;
+            this.password = Password;
+            this.totp = "";
+            this.extra = Notes;
+            this.name = Name;
+            this.grouping = "";
+            this.fav = "";
+        }
 
     }  // end LastPassItem Class
 
@@ -61,7 +94,23 @@ namespace CSV
         public string login_username { get; set; }
         public string login_password { get; set; }
         public string login_totp { get; set; }
-    }
+
+        public BitwardenItem() { }
+        public BitwardenItem(string Name, string URL, string Username, string Password, string Notes)
+        {
+            this.folder = "";
+            this.favorite = "";
+            this.type = "";
+            this.name = Name;
+            this.notes = Notes;
+            this.fields = "";
+            this.reprompt = "";
+            this.login_uri = URL;
+            this.login_username = Username;
+            this.login_password = Password;
+            this.login_totp = "";
+        }
+    } // end BitwardenItem Class
 
 
 } // end CSV namespace

@@ -115,7 +115,7 @@ namespace PassSentinel
             char[] UppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             char[] LowercaseChars = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
             char[] NumberChars = "0123456789".ToCharArray();
-            char[] SymbolChars = "!@#$%^&*()-_=+[]{}|;:,.<>?".ToCharArray();
+            char[] SymbolChars = "!@#$%^&*-_=+;:,.?".ToCharArray();
 
             // Combine character arrays based on the parameter
             char[] allChars = includeSymbols

@@ -35,7 +35,7 @@
             // 
             // doneLabel
             // 
-            doneLabel.Location = new Point(12, 9);
+            doneLabel.Location = new Point(55, 3);
             doneLabel.Name = "doneLabel";
             doneLabel.Size = new Size(116, 41);
             doneLabel.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             // okBtn
             // 
-            okBtn.Location = new Point(34, 53);
+            okBtn.Location = new Point(77, 47);
             okBtn.Name = "okBtn";
             okBtn.Size = new Size(67, 24);
             okBtn.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(140, 84);
+            ClientSize = new Size(226, 83);
             Controls.Add(okBtn);
             Controls.Add(doneLabel);
             Icon = (Icon)resources.GetObject("$this.Icon");

@@ -153,26 +153,8 @@ namespace PassSentinel
 
         private void exportBtn_Click(object sender, EventArgs e)
         {
-
-            PasswordConfirmPopup passwordForm = new PasswordConfirmPopup("Enter Password to Create an UNENCRYPTED Passwords Export.", "Export", false);
-            passwordForm.ShowDialog();
-
-            if (!passwordForm.GetConfirmed())
-                return;
-
-            exportSaveFileDialog.Title = "Export PassSentinel Passwords";
-            exportSaveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-            exportSaveFileDialog.DefaultExt = "csv";
-            exportSaveFileDialog.AddExtension = true;
-            exportSaveFileDialog.ShowDialog();
-
-            if (String.IsNullOrEmpty(exportSaveFileDialog.FileName))
-            {
-                errorLabel.Text = "Export Cancelled.";
-                return;
-            }
-
-            ExportVault(exportSaveFileDialog.FileName);
+            ExportForm exportForm = new ExportForm(sentinel);
+            exportForm.ShowDialog();
 
             return;
 

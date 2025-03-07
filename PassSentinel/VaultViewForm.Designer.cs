@@ -44,11 +44,13 @@
             searchLabel = new Label();
             lockBtn = new Button();
             imageList1 = new ImageList(components);
+            generateBtn = new Button();
             listItemContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // vaultListView
             // 
+            vaultListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             vaultListView.Columns.AddRange(new ColumnHeader[] { IDCol, nameCol });
             vaultListView.ContextMenuStrip = listItemContextMenuStrip;
             vaultListView.FullRowSelect = true;
@@ -121,6 +123,7 @@
             // 
             // settingsBtn
             // 
+            settingsBtn.Anchor = AnchorStyles.None;
             settingsBtn.Location = new Point(25, 455);
             settingsBtn.Name = "settingsBtn";
             settingsBtn.Size = new Size(75, 23);
@@ -131,6 +134,7 @@
             // 
             // searchTextBox
             // 
+            searchTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             searchTextBox.Location = new Point(174, 19);
             searchTextBox.Name = "searchTextBox";
             searchTextBox.Size = new Size(251, 23);
@@ -148,6 +152,7 @@
             // 
             // lockBtn
             // 
+            lockBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lockBtn.ImageIndex = 0;
             lockBtn.ImageList = imageList1;
             lockBtn.Location = new Point(431, 17);
@@ -164,11 +169,22 @@
             imageList1.TransparentColor = Color.Transparent;
             imageList1.Images.SetKeyName(0, "padlock.png");
             // 
+            // generateBtn
+            // 
+            generateBtn.Location = new Point(25, 79);
+            generateBtn.Name = "generateBtn";
+            generateBtn.Size = new Size(75, 23);
+            generateBtn.TabIndex = 8;
+            generateBtn.Text = "Generate";
+            generateBtn.UseVisualStyleBackColor = true;
+            generateBtn.Click += generateBtn_Click;
+            // 
             // VaultViewForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(481, 496);
+            Controls.Add(generateBtn);
             Controls.Add(lockBtn);
             Controls.Add(searchLabel);
             Controls.Add(searchTextBox);
@@ -201,5 +217,6 @@
         private Label searchLabel;
         private Button lockBtn;
         private ImageList imageList1;
+        private Button generateBtn;
     }
 }

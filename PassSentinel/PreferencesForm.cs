@@ -30,6 +30,8 @@ namespace PassSentinel
             usernameCheck.Checked = (bool)prefDict["SearchUsername"];
             notesCheck.Checked = (bool)prefDict["SearchNotes"];
             urlCheck.Checked = (bool)prefDict["SearchURL"];
+            viewUsernameCheck.Checked = (bool)prefDict["ViewUsername"];
+            viewUrlCheck.Checked = (bool)prefDict["ViewURL"];
 
             if ((int)prefDict["InactivityTimer"] == -1)
                 inactivityComboBox.SelectedItem = "Never";
@@ -82,12 +84,9 @@ namespace PassSentinel
             if (!ValidInput())
                 return;
 
-            int timerLen;
             string timerLenStr = inactivityComboBox.SelectedItem.ToString();
-            if (timerLenStr == "Never")
-                timerLen = -1;
-            else
-                timerLen = Int32.Parse(timerLenStr);
+            int timerLen = timerLenStr == "Never" ? -1 : Int32.Parse(timerLenStr);
+
 
             Preferences.RandomPasswordLength = Int32.Parse(lengthTextBox.Text);
             Preferences.GenerateSymbols = symbolsCheck.Checked;
@@ -95,17 +94,13 @@ namespace PassSentinel
             Preferences.SearchNotes = notesCheck.Checked;
             Preferences.SearchURL = urlCheck.Checked;
             Preferences.InactivityTimer = timerLen;
-            prefDict["RandomPasswordLength"] = Int32.Parse(lengthTextBox.Text);
-            prefDict["GenerateSymbols"] = symbolsCheck.Checked;
-            prefDict["SearchUsername"] = usernameCheck.Checked;
-            prefDict["SearchNotes"] = notesCheck.Checked;
-            prefDict["SearchURL"] = urlCheck.Checked;
-            prefDict["InactivityTimer"] = timerLen;
+            Preferences.ViewUsername = viewUsernameCheck.Checked;
+            Preferences.ViewURL = viewUrlCheck.Checked;
 
-            Globals.DB.UpdatePreferences(prefDict);
-
+            Globals.DB.UpdatePreferences(); // Updates based on Preferences static class
 
             this.Close();
+
         } // end updateBtn_Click
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -119,6 +114,16 @@ namespace PassSentinel
         }
 
         private void errorLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void usernameCheck_CheckedChanged(object sender, EventArgs e)
         {
 
         }

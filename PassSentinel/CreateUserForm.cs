@@ -46,6 +46,7 @@ namespace PassSentinel
 
         private void createUserBtn_Click(object sender, EventArgs e)
         {
+            int minLen = (int)Config.Get("min_pass_length");
             if (username == null || username == "")
             {
                 errorLabel.Text = "Enter a username!";
@@ -56,6 +57,12 @@ namespace PassSentinel
                 || this.masterPassInput1.Text != this.masterPassInput2.Text)
             {
                 errorLabel.Text = "Passwords do not match!";
+                return;
+            }
+
+            else if (masterPassInput1.Text.Length < minLen)
+            {
+                errorLabel.Text = $"Password must be at least {minLen} characters.";
                 return;
             }
 

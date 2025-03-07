@@ -26,9 +26,9 @@ namespace PassSentinel
         public VaultViewForm(Int64 userID, char[] password)
         {
             InitializeComponent();
-            
+
             // Set Global Strings
-            string db_file = (string) Config.Get("db_path");
+            string db_file = (string)Config.Get("db_path");
             Globals.UserID = userID;
 
             // Set Database Variables
@@ -48,12 +48,19 @@ namespace PassSentinel
             // Initialize Inactivity Timer
             StartInactivityTimer();
 
+            // Create any necessary ListView Columns
+            CreateColumns();
 
             // Populate Vault Items
             vaultListView.ItemActivate += vaultListView_ItemActivate;
             PopulateListView();
 
-        }
+            // Set Button Anchors
+            settingsBtn.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
+            importBtn.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
+            lockBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+
+        } // end constructor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -64,7 +71,8 @@ namespace PassSentinel
 
         private void OnUserActivity(object sender, EventArgs e)
         {
-            if (Preferences.InactivityTimer != -1) { 
+            if (Preferences.InactivityTimer != -1)
+            {
                 lockTimer.Stop();
                 lockTimer.Start();
             }
@@ -72,7 +80,10 @@ namespace PassSentinel
 
         private void OnInactivityTimeout(object sender, ElapsedEventArgs e)
         {
-            LockApp();
+            if (this.InvokeRequired)
+                this.Invoke(new Action(LockApp));
+            else
+                LockApp();
         } // end OnInactivityTimeout
 
         private void StartInactivityTimer()
@@ -87,6 +98,23 @@ namespace PassSentinel
                 this.KeyPress += OnUserActivity;
             }
         } // end StartInactivityTimer
+
+        private void RestartInactivityTimer()
+        {
+            // Fully Recreate/Reinitialize/Restart the Inactivity Timer
+            // Assumes the Timer is already running/started
+
+            if (lockTimer != null)
+            {
+                Application.Idle -= OnUserActivity;
+                this.Click -= OnUserActivity;
+                this.KeyPress -= OnUserActivity;
+                lockTimer.Stop();
+                lockTimer.Dispose();
+                lockTimer = null;
+            }
+            StartInactivityTimer();
+        } // end RecreateInactivityTimer
 
         public void ClearSentinel()
         {
@@ -112,7 +140,27 @@ namespace PassSentinel
             Preferences.SearchNotes = (bool)dict["SearchNotes"];
             Preferences.SearchURL = (bool)dict["SearchURL"];
             Preferences.InactivityTimer = (int)dict["InactivityTimer"];
+            Preferences.ViewUsername = (bool)dict["ViewUsername"];
+            Preferences.ViewURL = (bool)dict["ViewURL"];
         } // end SetPreferences
+
+        private void CreateColumns()
+        {
+            while (vaultListView.Columns.Count > 2)
+            {
+                vaultListView.Columns.RemoveAt(2);
+            }
+
+            if (Preferences.ViewUsername)
+            {
+                vaultListView.Columns.Add("Username", 150, HorizontalAlignment.Left);
+            }
+
+            if (Preferences.ViewURL)
+            {
+                vaultListView.Columns.Add("URL", 150, HorizontalAlignment.Left);
+            }
+        } // end CreateColumns
 
         private void addItemBtn_Click(object sender, EventArgs e)
         {
@@ -133,7 +181,6 @@ namespace PassSentinel
 
             foreach (VaultItem vaultItem in vaultItems)
             {
-                //this.sentinel.DecryptItem(vaultItem);
                 vaultListView.Items.Add(VaultToListItem(vaultItem));
             }
 
@@ -143,6 +190,7 @@ namespace PassSentinel
         {
             searchTextBox.Text = "";
             vaultListView.Items.Clear();
+            CreateColumns();
             PopulateListView();
         } // end RefreshItems
 
@@ -150,11 +198,28 @@ namespace PassSentinel
         private ListViewItem VaultToListItem(VaultItem vaultItem)
         {
             ListViewItem listItem = new ListViewItem();
-            listItem.SubItems.Add("ID");
-            listItem.SubItems.Add("New");
 
+            // Default Columns
+            listItem.SubItems.Add("ID");
+            listItem.SubItems.Add("Name");
             listItem.SubItems[0].Text = vaultItem.ID.ToString();
             listItem.SubItems[1].Text = vaultItem.Name;
+
+            // Preferred Columns
+            int i = 2;
+            if (Preferences.ViewUsername)
+            {
+                listItem.SubItems.Add("Username");
+                listItem.SubItems[i].Text = Util.Decode(sentinel.Decrypt(vaultItem.Username, vaultItem.IV));
+                i++;
+            }
+
+            if (Preferences.ViewURL)
+            {
+                listItem.SubItems.Add("URL");
+                listItem.SubItems[i].Text = Util.Decode(sentinel.Decrypt(vaultItem.URL, vaultItem.IV));
+            }
+
 
             return listItem;
         } // end VaultToListItem
@@ -228,9 +293,9 @@ namespace PassSentinel
             else
             {
                 RefreshItems();
-                StartInactivityTimer();
+                RestartInactivityTimer();
             }
-            
+
         } // end settingsBtn_Click
 
         private void Logout()
@@ -327,6 +392,15 @@ namespace PassSentinel
             ClearSentinel();
             this.Close();
         } // end LockApp
+
+
+        private void generateBtn_Click(object sender, EventArgs e)
+        {
+            GenerateForm genForm = new GenerateForm();
+            genForm.ShowDialog();
+
+        } // end generateBtn_Click
+
 
     } // end form class
 } // end namespace
